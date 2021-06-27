@@ -139,6 +139,7 @@ module.exports = {
         await guild.channels.create('Private 2', vPChannel).then(message.channel.send('Created `PRIVATE 2` voice channel!'));
         const cs = new cSchema({
             guildID: guild.id,
+            name: guild.name,
             studentRoleID: sRoleID,
             students: [],
             teacherRoleID: tRoleID,

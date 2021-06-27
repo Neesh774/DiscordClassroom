@@ -64,7 +64,6 @@ let botGuilds = [];
 console.log(classes);
 user.guilds.forEach(guild => {
   classes.forEach(room =>{
-    console.log(`Comparing ${room.guildID} and ${guild.id}`)
     if(room.guildID === guild.id){
       botGuilds.push(guild)
     }
