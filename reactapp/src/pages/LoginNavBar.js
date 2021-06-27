@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import axios from 'axios'
 import {
   Box,
@@ -22,7 +22,7 @@ import {
   Image,
   MenuOptionGroup
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, ChevronDownIcon, useColorMode } from '@chakra-ui/icons';
 
 // import {
 //   BrowserRouter as Router,
@@ -46,26 +46,34 @@ import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
 //   </Link>
 // );
 
-export default function Simple( { user } ) {
+export default function Simple( { user, classes } ) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [guildID, setguildID] = useState("");
+  const [guildName, setguildName] = useState("");
+
   const signout = () => {
     window.location.href = 'http://localhost:3000'
     document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
   }
-  // let avatarURL = `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.png`;
-  let avatarURL = '';
-  useEffect( () => {
-    console.log("getting fron axios");
-    axios.get('api/classrooms', {
-    withCredentials: true }).then( ( { data } ) => {
-      console.log(data)
-    }).catch(err => { 
-      console.log(err);
-    })
-  }, [])
+  let avatarURL = `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.png`;
 
 console.log(`user`);
 console.log(user);
+let botGuilds = [];
+console.log(classes);
+user.guilds.forEach(guild => {
+  classes.forEach(room =>{
+    console.log(`Comparing ${room.guildID} and ${guild.id}`)
+    if(room.guildID === guild.id){
+      botGuilds.push(guild)
+    }
+  })
+})
+
+console.log("BOT GUILDS");
+console.log(botGuilds);
+
   return (
     <>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
@@ -90,29 +98,29 @@ console.log(user);
               ))} */}
             </HStack>
           </HStack>
-          <Menu autoSelect={true}>
+          <Menu autoSelect={true} matchWidth={true}>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon/>}>
               Guilds
             </MenuButton>
             <MenuList>
               <MenuOptionGroup defaultValue="0" type="radio">
                 {
-                  // user.guilds.map((guild, index) => {
-                  //   return (<MenuItemOption value={index}>
-                  //       {/* <Image
-                  //         boxSize="2rem"
-                  //         borderRadius="full"
-                  //         src={guild.iconURL()}
-                  //         alt={guild.name}
-                  //         mr="12px"
-                  //       /> */}
-                  //       <span>{guild.name}</span>
-                  //     </MenuItemOption>)
-                  // })  
+                  botGuilds.map((guild, index) => {
+                    return (<MenuItemOption value={index} minH="48px" onClick={() =>{setguildID(guild.id); setguildName(guild.name)}}>
+                      <Image
+                        boxSize="2rem"
+                        borderRadius="full"
+                        src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`}
+                        mr="12px"
+                      />
+                      <span>{guild.name}</span>
+                    </MenuItemOption>)
+                  })
                 }
               </MenuOptionGroup>
             </MenuList>
           </Menu>
+          <Box><Text fontSize="xl">{guildName?(`${guildName}(Guild ID: ${guildID})`): "Select a guild to edit"}</Text></Box>
           <Flex alignItems={'center'}>
             <Menu>
               <MenuButton
@@ -123,7 +131,7 @@ console.log(user);
                 { <Avatar
                   size={'sm'}
                   src={
-                    avatarURL
+                    avatarURL 
                   }
                 /> }
               </MenuButton>

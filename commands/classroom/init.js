@@ -71,9 +71,9 @@ module.exports = {
         const rID = ids[0];
         const asID = ids[1];
         const sID = ids[2];
-        const rWebhook = `https://discord.com/api/webhooks/${ids[3]}/${ids[4]}`;
-        const asWebhook = `https://discord.com/api/webhooks/${ids[5]}/${ids[6]}`;
-        const sWebhook = `https://discord.com/api/webhooks/${ids[7]}/${ids[8]}`;
+        const rWebhook = `https://canary.discordapp.com/api/webhooks/${ids[3]}/${ids[4]}`;
+        const asWebhook = `https://canary.discordapp.com/api/webhooks/${ids[5]}/${ids[6]}`;
+        const sWebhook = `https://canary.discordapp.com/api/webhooks/${ids[7]}/${ids[8]}`;
         let sSChannel;
         let sMChannel;
         let sSHChannel;
