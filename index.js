@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const client = new Discord.Client({
     disableEveryone: true,
 });
-
+module.exports = client;
 client.commands = new Discord.Collection();
 
 ['command'].forEach(handler => {

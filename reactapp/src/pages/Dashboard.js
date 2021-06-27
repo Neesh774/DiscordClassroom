@@ -1,23 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import NavBar from './LoginNavBar.tsx'
-import { getUserDetails } from '.././utils/api'
+import axios from 'axios';
+import NavBar from './LoginNavBar.js'
 
 export default function Dashboard( { history } ) {
     
-    const [user, setUser] = React.useState( null )
+    const [user, setUser] = React.useState( {} )
     const [loading, setLoading ] = React.useState(true)
-
     React.useEffect( () => {
-        getUserDetails().then( ( { data } ) => {
-            console.log(data)
-            setUser(data)
-            setLoading(false)
-        }).catch(err => {   
-            setLoading(false)
-        })
+        const fetchData = async () => {
+          await axios.get('http://localhost:3001/api/auth/', {
+            withCredentials: true }).then( ( { data } ) => {
+                console.log(data)
+                setUser(data)
+                setLoading(false)
+            }).catch(err => { 
+                history.push('/');  
+                console.log(err);
+                setLoading(false);
+            })  
+        }
+        fetchData();
     }, [])
-
     return (
-        <NavBar/>
+        <NavBar user = {user}/>
     );
   }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unexpected-multiline */
 require('dotenv').config()
 require('./strategies/discord')
 
@@ -13,13 +14,24 @@ const Store = require('connect-mongo');
 
 const routes = require('./routes/index.js')
 
-mongoose.connect('mongodb+srv://Neesh:fljnyI5WBOyvnyvH@cluster0.99zcx.mongodb.net/DisClassroom?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+mongoose
+  .connect('mongodb+srv://Neesh:fljnyI5WBOyvnyvH@cluster0.99zcx.mongodb.net/DisClassroom?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
+  .then(() => {
+    console.log('Connected to database!');
+  })
+  .catch(error => {
+    console.log('Connection failed!');
+    console.log(error);
+  });
+
+const connection = mongoose.connection;
+
+connection.once('open', () => {
+  console.log('MongoDB database connection established successfully');
+});
 
 app.use(cors({
-    origin: ['http:localhost:3000'],
+    origin: ['http://localhost:3000'],
     credentials: true,
 }))
 

@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import axios from 'axios'
 import {
   Box,
   Flex,
@@ -11,6 +12,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Skeleton,
   MenuDivider,
   MenuItemOption,
   useDisclosure,
@@ -21,7 +23,6 @@ import {
   MenuOptionGroup
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
-import { getUserDetails } from '.././utils/api'
 
 // import {
 //   BrowserRouter as Router,
@@ -30,30 +31,41 @@ import { getUserDetails } from '.././utils/api'
 //   Link as RouteLink
 // } from 'react-router-dom'
 
-const Links = ['Assignments', 'Resources'];
-const NavLink = ({ children }: { children: ReactNode }) => (
-  <Link
-    px={2}
-    py={1}
-    rounded={'md'}
-    _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('gray.200', 'gray.700'),
-    }}
-    href={'#'}>
-    {children}
-  </Link>
-);
+// const Links = ['Assignments', 'Resources'];
+// const NavLink = ({ children }: { children: ReactNode }) => (
+//   <Link
+//     px={2}
+//     py={1}
+//     rounded={'md'}
+//     _hover={{
+//       textDecoration: 'none',
+//       bg: useColorModeValue('gray.200', 'gray.700'),
+//     }}
+//     href={'#'}>
+//     {children}
+//   </Link>
+// );
 
-export default function Simple() {
+export default function Simple( { user } ) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const signout = () => {
     window.location.href = 'http://localhost:3000'
     document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
   }
+  // let avatarURL = `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.png`;
   let avatarURL = '';
+  useEffect( () => {
+    console.log("getting fron axios");
+    axios.get('api/classrooms', {
+    withCredentials: true }).then( ( { data } ) => {
+      console.log(data)
+    }).catch(err => { 
+      console.log(err);
+    })
+  }, [])
 
-  console.log(avatarURL);
+console.log(`user`);
+console.log(user);
   return (
     <>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
@@ -83,37 +95,21 @@ export default function Simple() {
               Guilds
             </MenuButton>
             <MenuList>
-              <MenuOptionGroup defaultValue="1">
-                <MenuItemOption value="1" minH="30px">
-                  <Image
-                    boxSize="2rem"
-                    borderRadius="full"
-                    src="https://i.redd.it/s9biyhs4lix61.jpg"
-                    alt="Guild 1"
-                    mr="12px"
-                  />
-                  <span>Guild 1</span>
-                </MenuItemOption>
-                <MenuItemOption value="2" minH="48px">
-                  <Image
-                      boxSize="2rem"
-                      borderRadius="full"
-                      src="https://i.redd.it/s9biyhs4lix61.jpg"
-                      alt="Guild 2"
-                      mr="12px"
-                    />
-                    <span>Guild 2</span>
-                </MenuItemOption>
-                <MenuItemOption value="3" minH="48px">
-                  <Image
-                      boxSize="2rem"
-                      borderRadius="full"
-                      src="https://i.redd.it/s9biyhs4lix61.jpg"
-                      alt="Guild 3"
-                      mr="12px"
-                    />
-                    <span>Guild 3</span>
-                </MenuItemOption>
+              <MenuOptionGroup defaultValue="0" type="radio">
+                {
+                  // user.guilds.map((guild, index) => {
+                  //   return (<MenuItemOption value={index}>
+                  //       {/* <Image
+                  //         boxSize="2rem"
+                  //         borderRadius="full"
+                  //         src={guild.iconURL()}
+                  //         alt={guild.name}
+                  //         mr="12px"
+                  //       /> */}
+                  //       <span>{guild.name}</span>
+                  //     </MenuItemOption>)
+                  // })  
+                }
               </MenuOptionGroup>
             </MenuList>
           </Menu>
@@ -141,9 +137,9 @@ export default function Simple() {
         {isOpen ? (
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
-              {Links.map((link) => (
+              {/* {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
-              ))}
+              ))} */}
             </Stack>
           </Box>
         ) : null}
