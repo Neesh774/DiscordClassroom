@@ -13,8 +13,8 @@ const cors = require('cors')
 const Store = require('connect-mongo');
 const connectDB = require('./connect');
 const routes = require('./routes/index.js')
-
 connectDB();
+app.use(express.json());
 
 app.use(cors({
     origin: ['http://localhost:3000'],
@@ -35,7 +35,6 @@ app.use(
 
 app.use(passport.initialize())
 app.use(passport.session())
-
 app.use('/api', routes);
 
 app.listen(PORT, () => {
